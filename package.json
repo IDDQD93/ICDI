@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@types/cesium": "^1.67.14",
+    "@types/maplibre-gl": "^1.13.2",
+    "@types/react": "^19.2.4",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "cesium": "^1.135.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.2",
+    "vite-plugin-cesium": "^1.2.23"
+  },
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "maplibre-gl": "^5.13.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
