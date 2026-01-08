@@ -2,10 +2,11 @@
   --bg: #0b1b47;
   --stroke: rgba(255,255,255,0.10);
   --text: #eaf0ff;
+  --topbar-h: 72px;
 }
 
-*{ box-sizing: border-box; }
-html, body, #root{ height: 100%; }
+
+
 body{
   margin:0;
   font-family: Inter, system-ui, Arial, sans-serif;
@@ -20,7 +21,7 @@ body{
   flex-direction: column;
 }
 
-/* top bar */
+/* ================= TOP BAR ================= */
 .topbar{
   height: 72px;
   display: flex;
@@ -38,6 +39,7 @@ body{
 .brandBold{ font-weight: 700; }
 
 .topActions{ display:flex; gap: 14px; }
+
 .pill{
   border: 1px solid var(--stroke);
   background: rgba(255,255,255,0.06);
@@ -48,17 +50,22 @@ body{
 }
 .pill:hover{ background: rgba(255,255,255,0.10); }
 
-/* main layout */
+/* ================= MAIN LAYOUT ================= */
 .layout{
   flex: 1;
   display: grid;
   grid-template-columns: 72px 1fr;
   gap: 18px;
-  padding: 0 18px 18px 18px;
+  padding: 0 18px 18px;
   min-height: 0;
+  position: relative;
 }
 
-/* left bar */
+/* ================= LEFT BAR ================= */
+.left-zone{
+  position: relative;
+}
+
 .sidebar{
   border-radius: 18px;
   background: rgba(255,255,255,0.05);
@@ -76,26 +83,33 @@ body{
   background: rgba(255,255,255,0.06);
   color: var(--text);
   cursor: pointer;
-  font-size: 18px;
 }
 .iconBtn:hover{ background: rgba(255,255,255,0.10); }
 
-/* middle + right */
+/* ================= CENTER ================= */
 .main{
   min-height: 0;
-  display: grid;
-  grid-template-columns: 1fr 320px;
+  display: flex;
+  flex-direction: column;
   gap: 18px;
 }
 
-/* map block */
-.map-wrapper{
-  position: relative;
+/* 🔑 карта + характеристики */
+.main-top{
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
   min-height: 0;
 }
 
+/* map */
+.map-wrapper{
+  position: relative;
+  min-height: 420px;
+}
+
 .map-card{
-  height: 100%;
+  height: 130%;
   border-radius: 22px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--stroke);
@@ -119,9 +133,10 @@ body{
   flex-direction: column;
   gap: 10px;
 }
+
 .zoomBtn{
-  width: 44px;
-  height: 44px;
+  width: 35px;
+  height: 35px;
   border-radius: 14px;
   border: 1px solid var(--stroke);
   background: rgba(10,20,60,0.65);
@@ -131,8 +146,9 @@ body{
 }
 .zoomBtn:hover{ background: rgba(10,20,60,0.80); }
 
-/* right panel */
+/* ================= RIGHT PANEL ================= */
 .right-panel{
+  position: relative;
   display:flex;
   flex-direction: column;
   gap: 14px;
@@ -144,7 +160,7 @@ body{
   border-radius: 18px;
   background: rgba(255,255,255,0.06);
   border: 1px solid var(--stroke);
-  padding: 14px 14px 12px 14px;
+  padding: 14px;
 }
 
 .panelTitle{
@@ -157,7 +173,6 @@ body{
   grid-template-columns: 1fr auto;
   gap: 8px 12px;
   font-size: 14px;
-  opacity: 0.95;
 }
 
 .k{ opacity: 0.85; }
@@ -165,9 +180,632 @@ body{
 
 .mediaRow{
   display:flex;
-  align-items:center;
   justify-content: space-between;
   padding: 10px 0;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
-.mediaRow:first-of-type{ border-top: none; padding-top: 0; }
+.mediaRow:first-of-type{
+  border-top: none;
+  padding-top: 0;
+}
+
+/* ================= PARAMS PANEL (UNDER MAP) ================= */
+.params-panel{
+  margin-top: 184px;
+  width: 40%;
+  max-width: 150%;
+}
+
+/* ================= LEFT SLIDE PANEL ================= */
+.left-panel{
+  position: fixed;
+  left: 82px;
+  top: calc(var(--topbar-h) + 8px);
+  width: 300px;
+  background: var(--bg);
+  border-radius: 16px;
+  padding: 18px 12px 12px;
+  transform: translateX(-120%);
+  transition: transform 0.3s ease;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+.left-panel.open{
+  transform: translateX(0);
+}
+
+.panelBtn{
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #cfd9ff;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+.panelBtn:hover{
+  background: rgba(255,255,255,0.08);
+}
+
+.panelBtn.active{
+  background: linear-gradient(90deg, #7b8cff, #a18bff);
+  color: #0f1e3d;
+  font-weight: 500;
+}
+
+/* ================= ACCORDION ================= */
+.accordion{
+
+  border-radius: 12px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.accordionHeader{
+  width: 50%;
+  padding: 12px 14px;
+  background: #4b3f92;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordionHeader span{
+  transition: transform 0.2s ease;
+}
+
+.accordionBody{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  padding: 0 14px;
+}
+
+.accordion.open .accordionBody{
+  max-height: 600px;
+  padding: 12px 14px;
+}
+
+.accordion.open .accordionHeader span{
+  transform: rotate(90deg);
+}
+
+.accordionBody label{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: #cfd9ff;
+  margin-bottom: 10px;
+}
+
+.accordionBody input,
+.accordionBody select{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #fff;
+}
+
+.row{
+  display: flex;
+  gap: 8px;
+}
+
+.analyticsOverlay {
+  position: fixed;
+  top: 88px;      /* высота topbar */
+  left: 82px;     /* ширина sidebar */
+  right: 0;
+  bottom: 0;
+
+  z-index: 50;
+
+  /* можно сделать совсем прозрачным */
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.analyticsModal {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 380px;   /* подгони под макет */
+  height: 100%;
+
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 16px 0 0 16px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  animation: analyticsSlideIn 0.22s ease-out;
+}
+
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.analyticsHeader button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.analyticsTabs {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.analyticsTabs button {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.analyticsTabs .active {
+  background: #6b5cff;
+}
+
+.analyticsContent {
+  display: grid;
+  gap: 12px;
+}
+
+.chartPlaceholder {
+  height: 140px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.issues {
+  display: grid;
+  gap: 8px;
+}
+
+.issue {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.issue.critical {
+  background: rgba(255,0,0,0.2);
+}
+
+.issue.warning {
+  background: rgba(255,165,0,0.2);
+}
+
+.issue.notice {
+  background: rgba(255,255,0,0.2);
+}
+
+.analytics-modal {
+  position: absolute;
+  top: 0;
+  left: 990px;          /* ← сдвиг ВЛЕВО от карты */
+  
+  width: 340px;
+  height: auto;
+
+  background: #132b5c;
+  border-radius: 16px;
+  padding: 16px;
+
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  z-index: 30;
+}
+
+.chartCard {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.chartTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.chartTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chartArea {
+  width: 100%;
+}
+
+/* Reports Modal */
+
+/* Оверлей — панель справа как в макете */
+.reportsOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 30, 0.35);
+  z-index: 110;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+/* Правая панель */
+.reportsModal {
+  width: 360px;
+  height: 100%;
+  background: #f6f7fb;
+  color: #0f1b33;
+  border-left: 1px solid rgba(15, 27, 51, 0.10);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.reportsHeader {
+  padding: 14px 14px 10px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(15, 27, 51, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.reportsHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.reportsHeader button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #0f1b33;
+}
+
+/* Scroll */
+.reportsScroll {
+  padding: 12px;
+  overflow: auto;
+  display: grid;
+  gap: 12px;
+}
+
+.reportCard {
+  background: #fff;
+  border: 1px solid rgba(15, 27, 51, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.reportCardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f1b33;
+}
+
+.reportSectionTitle {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: rgba(15, 27, 51, 0.85);
+}
+
+.chartBox {
+  border: 1px dashed rgba(15, 27, 51, 0.18);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(15, 27, 51, 0.02);
+}
+
+.scorePill {
+  margin-top: 10px;
+  background: #dff3df;
+  border: 1px solid rgba(30, 120, 30, 0.20);
+  color: #1a6d1a;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.reportTotals {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.muted { opacity: 0.75; }
+
+/* Form */
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.field label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.field select {
+  background: #fff;
+  border: 1px solid rgba(15, 27, 51, 0.12);
+  border-radius: 10px;
+  padding: 9px 10px;
+  outline: none;
+}
+
+.checkGrid {
+  display: grid;
+  gap: 8px;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(15, 27, 51, 0.9);
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.uploadBtn {
+  background: #ffffff;
+  border: 1px solid rgba(15, 27, 51, 0.14);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+}
+
+.uploadBtn input { display: none; }
+
+.logoName {
+  font-size: 12px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.commentBox {
+  width: 100%;
+  resize: none;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 27, 51, 0.12);
+  outline: none;
+  font-size: 12px;
+}
+
+/* Footer button */
+.reportsFooter {
+  padding: 12px;
+  background: #ffffff;
+  border-top: 1px solid rgba(15, 27, 51, 0.08);
+}
+
+.buildBtn {
+  width: 100%;
+  background: #6b5cff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Появления панели с ИИ */
+.assistantOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 30, 0.25);
+  z-index: 120;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.assistantModal {
+  width: 360px;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid rgba(15, 27, 51, 0.10);
+  display: flex;
+  flex-direction: column;
+}
+
+.assistantHeader {
+  padding: 14px;
+  border-bottom: 1px solid rgba(15, 27, 51, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.assistantTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f1b33;
+}
+
+.assistantClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: rgba(15, 27, 51, 0.7);
+}
+
+.assistantBody {
+  padding: 12px;
+  overflow: auto;
+  flex: 1;
+}
+
+.assistantDay {
+  font-size: 11px;
+  color: rgba(15, 27, 51, 0.45);
+  text-align: center;
+  margin: 6px 0 10px;
+}
+
+.assistantChat {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.assistantMsgRow {
+  display: flex;
+}
+
+.assistantMsgRow.bot {
+  justify-content: flex-start;
+}
+
+.assistantMsgRow.me {
+  justify-content: flex-end;
+}
+
+.assistantBubble {
+  max-width: 88%;
+  background: #eef2ff;
+  border: 1px solid rgba(107, 92, 255, 0.16);
+  border-radius: 12px;
+  padding: 10px 10px 8px;
+  color: #0f1b33;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.assistantMsgRow.me .assistantBubble {
+  background: #f3f4f6;
+  border: 1px solid rgba(15, 27, 51, 0.10);
+}
+
+.assistantTime {
+  font-size: 10px;
+  opacity: 0.55;
+  margin-top: 6px;
+  text-align: right;
+}
+
+.assistantQuickTitle {
+  font-size: 11px;
+  color: rgba(15, 27, 51, 0.55);
+  margin-bottom: 8px;
+}
+
+.assistantQuick {
+  display: grid;
+  gap: 8px;
+}
+
+.assistantQuickBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: #f6f7fb;
+  border: 1px solid rgba(15, 27, 51, 0.10);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(15, 27, 51, 0.9);
+  text-align: left;
+}
+
+.assistantQuickIcon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b5cff;
+}
+
+.assistantFooter {
+  padding: 12px;
+  border-top: 1px solid rgba(15, 27, 51, 0.08);
+  background: #fff;
+}
+
+.assistantInputRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.assistantInput {
+  flex: 1;
+  border: 1px solid rgba(15, 27, 51, 0.12);
+  border-radius: 10px;
+  padding: 10px 10px;
+  font-size: 12px;
+  outline: none;
+}
+
+.assistantSend {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #6b5cff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.assistantSave {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f6f7fb;
+  border: 1px solid rgba(15, 27, 51, 0.10);
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(15, 27, 51, 0.85);
+}
